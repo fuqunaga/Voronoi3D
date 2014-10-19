@@ -1,0 +1,15 @@
+[Ll]ibrary/
+[Tt]emp/
+
+*.pidb
+*unityproj
+*.csproj
+*.booproj
+*.sln
+*.userprefs
+
+#Mac
+*.DS_Store
+obj
+*.app
+*.swp
