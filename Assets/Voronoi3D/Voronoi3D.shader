@@ -6,7 +6,6 @@
 		_pointNum("PointNum", int) = 0
 		_pointScale("PointScale", float) = 1.0
 		_pointOffset("PointOffset", Vector) = (0.0, 0.0, 0.0, 0.0)
-		_lerpDistance("LerpDistance", float)=0.01
 	}
 
 	SubShader
@@ -37,7 +36,6 @@
 			uniform int _pointNum;
 			uniform float _pointScale;
 			uniform float3 _pointOffset;
-			uniform float _lerpDistance;
 
 
 			struct v2f
@@ -58,40 +56,24 @@
 			float4 frag(v2f IN) : COLOR
 			{
 				float3 pos = tex2D(_pointData, float2(0.0,0.0)).xyz;
-				float distMin0 = distance(pos, IN.posW);
-				float distMin1 = 0.0;
-				int idx0 = 0;
-				int idx1 = -1;
+				float distMin = distance(pos, IN.posW);
+				float4 col = tex2D(_pointData, float2((float)0/_pointNum, 1.0));
 			
 				for(int i=1; i<_pointNum; i++)
 				{
 					float3 pos = tex2D(_pointData, float2((float)i/_pointNum, 0.0)).xyz * _pointScale + _pointOffset;
 					float dist = distance(pos, IN.posW);
-					if ( dist <= distMin0)
+					if ( dist < distMin)
 					{
-						distMin1 = distMin0;
-						idx1 = idx0;
-						distMin0 = dist;
-						idx0 = i;
-					}
-					else if ( (dist < distMin1) || idx1 < 0 )
-					{
-						distMin1 = dist;
-						idx1 = i;
+						col = tex2D(_pointData, float2((float)i/_pointNum, 1.0));
 					}
 				}
 				
-				
-				float4 col =  tex2D(_pointData, float2((float)idx0/_pointNum, 1.0));
-				if ( idx1 >= 0 ){
-					float4 colOther =  tex2D(_pointData, float2((float)idx1/_pointNum, 1.0));
-				 	float rate = saturate((distMin1 - distMin0) / _lerpDistance) * 0.5 + 0.5;
-				 	
-				 	col = col * rate + colOther * (1.0-rate);
-				}
 				return col;
 			}
 		ENDCG
 		}
 	}
+	
+	Fallback Off
 }

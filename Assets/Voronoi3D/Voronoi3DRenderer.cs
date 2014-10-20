@@ -16,6 +16,8 @@ public class Voronoi3DRenderer : MonoBehaviour {
 		var mat = renderer.material;
 		mat.SetTexture("_pointData", voronoi.pointData);
 		mat.SetInt("_pointNum", voronoi.pointNum);
+		mat.SetVector ("_pointOffset", voronoi.offset);
+		mat.SetFloat ("_pointScale", voronoi.scale);
 	
 	}
 }

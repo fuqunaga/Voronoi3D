@@ -6,6 +6,8 @@ public class Voronoi3D : MonoBehaviour {
 	public Texture2D pointData;
 	public int pointNum = 100;
 	public GameObject quad;
+	public Vector3 offset = Vector3.zero;
+	public float scale = 1f;
 
 	void Start () {
 
@@ -20,7 +22,7 @@ public class Voronoi3D : MonoBehaviour {
 		for(var i=0; i<num; ++i)
 		{
 			var pos = new Vector3(Random.value, Random.value, Random.value);
-			pos = pos * 2f;
+			pos = pos * scale + offset;
 
 			pixels[i] = new Color(pos.x, pos.y, pos.z, 1f);
 			pixels[i+num] = new Color(Random.value, Random.value, Random.value, 0.2f);
